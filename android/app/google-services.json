@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "733135093435",
+    "project_id": "cmn-furniture-2e1cc",
+    "storage_bucket": "cmn-furniture-2e1cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733135093435:android:ef514066416a016b32739e",
+        "android_client_info": {
+          "package_name": "com.example.cimenfurniture"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733135093435-4lr565spc3bah451ibooo9b1p3l3pp80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbhH_QF-6d_9qK_Tc8edX-Oy907N0FfBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733135093435-4lr565spc3bah451ibooo9b1p3l3pp80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
