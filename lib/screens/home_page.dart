@@ -22,34 +22,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("homepage çalıştı");
     return Scaffold(
         body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CarouselSlider.builder(
-            carouselController: controller,
-            options: CarouselOptions(
-                height: 400,
-                autoPlay: true,
-                autoPlayAnimationDuration: const Duration(seconds: 2),
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-                onPageChanged: (index, reason) => setState(
-                      () => activeIndex = index,
-                    )),
-            itemCount: homePageImages.length,
-            itemBuilder: (context, index, realIndex) {
-              final homePageimage = homePageImages[index];
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CarouselSlider.builder(
+              carouselController: controller,
+              options: CarouselOptions(
+                  height: 400,
+                  autoPlay: true,
+                  autoPlayAnimationDuration: const Duration(seconds: 2),
+                  enableInfiniteScroll: false,
+                  enlargeCenterPage: true,
+                  onPageChanged: (index, reason) => setState(
+                        () => activeIndex = index,
+                      )),
+              itemCount: homePageImages.length,
+              itemBuilder: (context, index, realIndex) {
+                final homePageimage = homePageImages[index];
 
-              return buildImage(homePageimage, index);
-            },
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          buildIndicator()
-        ],
+                return buildImage(homePageimage, index);
+              },
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            buildIndicator()
+          ],
+        ),
       ),
     ));
   }

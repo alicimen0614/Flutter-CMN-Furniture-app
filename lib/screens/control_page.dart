@@ -24,26 +24,8 @@ class _ControlPageState extends State<ControlPage> {
   ];
   @override
   Widget build(BuildContext context) {
+    print("controlpage çalıştı");
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              color: Colors.amber,
-              onPressed: () {
-                Provider.of<Auth>(context, listen: false).signOut();
-              },
-              icon: const Icon(Icons.logout))
-        ],
-        backgroundColor: Colors.grey[50],
-        title: const Text(
-          'CMN',
-          style: TextStyle(
-              color: Colors.amberAccent,
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic),
-        ),
-        centerTitle: true,
-      ),
       body: screens[currentIndex],
       bottomNavigationBar: bottomNavigationBarBuilder(),
     );

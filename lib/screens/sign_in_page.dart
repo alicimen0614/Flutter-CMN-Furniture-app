@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../services/auth.dart';
 
-enum FormStatus { signIn, register }
+enum FormStatus { signIn, register, reset }
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -15,6 +15,26 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController signInEmailController = TextEditingController();
+  TextEditingController signInPasswordController = TextEditingController();
+
+  TextEditingController registerEmailController = TextEditingController();
+  TextEditingController registerPasswordController = TextEditingController();
+  TextEditingController registerPasswordConfirmController =
+      TextEditingController();
+  TextEditingController resetEmailController = TextEditingController();
+
+  @override
+  void dispose() {
+    signInEmailController.dispose();
+    signInPasswordController.dispose();
+    registerEmailController.dispose();
+    registerPasswordController.dispose();
+    registerPasswordConfirmController.dispose();
+    resetEmailController.dispose();
+    super.dispose();
+  }
+
   FormStatus _formStatus = FormStatus.signIn;
   bool _isLoading = false;
 
@@ -31,8 +51,22 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
+  Future<void>? _signInWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final user =
+        await Provider.of<Auth>(context, listen: false).signInWithGoogle();
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("signin page çalıştı");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -55,7 +89,9 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(10.0),
                 child: _formStatus == FormStatus.signIn
                     ? buildSignInForm()
-                    : buildRegisterForm(),
+                    : _formStatus == FormStatus.register
+                        ? buildRegisterForm()
+                        : buildResetForm(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +108,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   SignInButton(
                     color: Colors.redAccent,
-                    onPressed: () {},
+                    onPressed: _isLoading ? null : _signInWithGoogle,
                     child: const Text("Google ile giriş"),
                   )
                 ],
@@ -85,9 +121,6 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Form buildSignInForm() {
-    TextEditingController signInEmailController = TextEditingController();
-    TextEditingController signInPasswordController = TextEditingController();
-
     final signInFormKey = GlobalKey<FormState>();
     return Form(
         key: signInFormKey,
@@ -160,6 +193,10 @@ class _SignInPageState extends State<SignInPage> {
                     final user = await Provider.of<Auth>(context, listen: false)
                         .signInWithEmailAndPassword(signInEmailController.text,
                             signInPasswordController.text);
+
+                    if (!user!.emailVerified) {
+                      await _emailDialog();
+                    }
                   }
                 },
                 child: const Text("Giriş Yap")),
@@ -177,15 +214,22 @@ class _SignInPageState extends State<SignInPage> {
                   style: TextStyle(color: Colors.amberAccent),
                 ))
           ]),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  _formStatus = FormStatus.reset;
+                });
+              },
+              child: const Text(
+                "Şifremi unuttum.",
+                style: TextStyle(color: Colors.amberAccent),
+              ))
         ]));
   }
 
   Form buildRegisterForm() {
+    print("registerform çaıştı");
     final registerFormKey = GlobalKey<FormState>();
-
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController passwordConfirmController = TextEditingController();
 
     return Form(
         key: registerFormKey,
@@ -200,7 +244,7 @@ class _SignInPageState extends State<SignInPage> {
               height: 25,
             ),
             TextFormField(
-              controller: emailController,
+              controller: registerEmailController,
               validator: (value) {
                 if (EmailValidator.validate(value!)) {
                   return null;
@@ -226,11 +270,11 @@ class _SignInPageState extends State<SignInPage> {
               height: 10,
             ),
             TextFormField(
-              controller: passwordController,
+              controller: registerPasswordController,
               validator: (value) {
                 if (value!.length < 6 || value.length > 16) {
                   return "Şifreniz 6-16 karakter arasında olmalıdır";
-                } else if (value != passwordConfirmController.text) {
+                } else if (value != registerPasswordConfirmController.text) {
                   return 'Şifreler Uyuşmuyor';
                 } else {
                   return null;
@@ -254,11 +298,11 @@ class _SignInPageState extends State<SignInPage> {
               height: 10,
             ),
             TextFormField(
-              controller: passwordConfirmController,
+              controller: registerPasswordConfirmController,
               validator: (value) {
                 if (value!.length < 6 || value.length > 16) {
                   return "Şifreniz 6-16 karakter arasında olmalıdır";
-                } else if (value != passwordController.text) {
+                } else if (value != registerPasswordController.text) {
                   return 'Şifreler Uyuşmuyor';
                 } else {
                   return null;
@@ -287,11 +331,20 @@ class _SignInPageState extends State<SignInPage> {
                   color: Colors.amber,
                   onPressed: () async {
                     if (registerFormKey.currentState!.validate()) {
-                      final user = await Provider.of<Auth>(context,
-                              listen: false)
-                          .createUserWithEmailAndPassword(
-                              emailController.text, passwordController.text);
-                      print(user!.email);
+                      final user =
+                          await Provider.of<Auth>(context, listen: false)
+                              .createUserWithEmailAndPassword(
+                                  registerEmailController.text,
+                                  registerPasswordController.text);
+
+                      if (!user!.emailVerified) {
+                        await user.sendEmailVerification();
+                      }
+                      setState(() {
+                        _formStatus = FormStatus.signIn;
+                        print(_formStatus);
+                      });
+                      await _emailDialog();
                     }
                   },
                   child: const Text("Kayıt Ol")),
@@ -313,5 +366,129 @@ class _SignInPageState extends State<SignInPage> {
             ]),
           ],
         ));
+  }
+
+  Form buildResetForm() {
+    print("resetform çaıştı");
+
+    final resetFormKey = GlobalKey<FormState>();
+    return Form(
+        key: resetFormKey,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Text(
+            "Şifre Sıfırla",
+            style: TextStyle(fontSize: 25),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          TextFormField(
+            controller: resetEmailController,
+            validator: (value) {
+              if (EmailValidator.validate(value!)) {
+                return null;
+              } else {
+                return "Lütfen geçerli bir e-mail adresi giriniz";
+              }
+            },
+            cursorColor: Colors.amberAccent,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    borderSide: const BorderSide(color: Colors.amberAccent)),
+                prefixIcon: const Icon(
+                  Icons.email,
+                  color: Colors.amberAccent,
+                ),
+                hintText: "E-mail",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0))),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 200,
+            child: SignInButton(
+                color: Colors.amber,
+                onPressed: () async {
+                  if (resetFormKey.currentState!.validate()) {
+                    Provider.of<Auth>(context, listen: false)
+                        .sendPasswordResetEmail(resetEmailController.text);
+                    await _resetDialog();
+                  }
+                },
+                child: const Text("Gönder")),
+          ),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  _formStatus = FormStatus.signIn;
+                });
+              },
+              child: const Text(
+                "Giriş yap.",
+                style: TextStyle(color: Colors.amberAccent),
+              ))
+        ]));
+  }
+
+  Future<void> _emailDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('E-posta doğrulama gerekli'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                    'Lütfen e-posta adresinize giderek hesabınızı doğrulayınız.'),
+                Text(
+                    'Onay linkine tıklatıkdan sonra bilgilerinizle giriş yapabilirsiniz.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Onayla'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _resetDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('ŞİFRE YENİLEME'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Lütfen e-posta adresinizi kontrol ediniz.'),
+                Text('Linke tıklayarak şifrenizi yenileyebilirsiniz.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Onayla'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

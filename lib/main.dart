@@ -23,19 +23,24 @@ class _MyAppState extends State<MyApp> {
     return Provider<Auth>(
       create: (context) => Auth(),
       child: MaterialApp(
+          theme: ThemeData().copyWith(
+            colorScheme: ThemeData().colorScheme.copyWith(
+                  primary: Colors.amber,
+                ),
+          ),
           home: FutureBuilder(
-        future: _initialization,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("hata oluştu");
-          } else if (snapshot.hasData) {
-            print("Onboard çalıştı");
-            return const OnBoardWidget();
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      )),
+            future: _initialization,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text("hata oluştu");
+              } else if (snapshot.hasData) {
+                print("Onboard çalıştı");
+                return const OnBoardWidget();
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          )),
     );
   }
 }
