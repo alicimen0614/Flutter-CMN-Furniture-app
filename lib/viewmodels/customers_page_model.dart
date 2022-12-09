@@ -14,7 +14,7 @@ class CustomersPageModel extends ChangeNotifier {
         .getCustomerListFromApi(customersRef)
         .map((querySnapshot) => querySnapshot.docs);
 
-    ///Stream<List<DocumentSnapshot>> --> Stream<List<Book>>
+    ///Stream<List<DocumentSnapshot>> --> Stream<List<Customer>>
     Stream<List<Customers>> streamListCustomer = streamListDocument.map(
         (listOfDocSnap) => listOfDocSnap
             .map((docSnap) =>

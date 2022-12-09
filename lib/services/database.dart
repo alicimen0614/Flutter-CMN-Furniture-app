@@ -27,4 +27,13 @@ class Database {
         .doc(Customers.fromMap(customerAsMap).id)
         .set(customerAsMap);
   }
+
+  Future<Stream<QuerySnapshot<Map<String, dynamic>>>> getCustomerWorks(
+      {required String collectionPath, required String id}) async {
+    return await _firestore
+        .collection(collectionPath)
+        .doc(id)
+        .get()
+        .then((value) => value.data()!['works']);
+  }
 }

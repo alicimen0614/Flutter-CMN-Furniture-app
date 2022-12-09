@@ -36,50 +36,48 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   FormStatus _formStatus = FormStatus.signIn;
-  bool _isLoading = false;
 
   Future<void>? _signInAnonymously() async {
-    setState(() {
-      _isLoading = true;
-    });
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
 
     final user =
         await Provider.of<Auth>(context, listen: false).signInAnonymously();
 
-    setState(() {
-      _isLoading = false;
-    });
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   Future<void>? _signInWithGoogle() async {
-    setState(() {
-      _isLoading = true;
-    });
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
 
     final user =
         await Provider.of<Auth>(context, listen: false).signInWithGoogle();
 
-    setState(() {
-      _isLoading = false;
-    });
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     print("signin page çalıştı");
     return Scaffold(
+      backgroundColor: Colors.amber,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-      ),
       body: Center(
           child: Padding(
         padding: const EdgeInsets.only(bottom: 20, top: 20),
         child: Container(
-          padding: EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: 50),
           decoration: BoxDecoration(
-              color: Colors.brown[400],
-              borderRadius: BorderRadius.circular(25)),
+              color: Colors.grey[200], borderRadius: BorderRadius.circular(25)),
           height: 600,
           width: 350,
           child: Column(
@@ -98,7 +96,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: [
                   SignInButton(
                       color: Colors.orangeAccent,
-                      onPressed: _isLoading ? null : _signInAnonymously,
+                      onPressed: _signInAnonymously,
                       child: const Text(
                         "Anonim Giriş",
                         style: TextStyle(color: Colors.black),
@@ -108,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   SignInButton(
                     color: Colors.redAccent,
-                    onPressed: _isLoading ? null : _signInWithGoogle,
+                    onPressed: _signInWithGoogle,
                     child: const Text("Google ile giriş"),
                   )
                 ],
@@ -190,9 +188,16 @@ class _SignInPageState extends State<SignInPage> {
                 color: Colors.amber,
                 onPressed: () async {
                   if (signInFormKey.currentState!.validate()) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ));
                     final user = await Provider.of<Auth>(context, listen: false)
                         .signInWithEmailAndPassword(signInEmailController.text,
                             signInPasswordController.text);
+                    if (!mounted) return;
+                    Navigator.pop(context);
 
                     if (!user!.emailVerified) {
                       await _emailDialog();
@@ -467,7 +472,7 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _resetDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false, // user must tap the button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('ŞİFRE YENİLEME'),

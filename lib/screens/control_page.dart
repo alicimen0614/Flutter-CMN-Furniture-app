@@ -1,11 +1,8 @@
 import 'package:cimenfurniture/screens/customers_page.dart';
-import 'package:cimenfurniture/screens/furnitures_page.dart';
+import 'package:cimenfurniture/screens/categories_page.dart';
 import 'package:cimenfurniture/screens/home_page.dart';
 import 'package:cimenfurniture/screens/user_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../services/auth.dart';
 
 class ControlPage extends StatefulWidget {
   const ControlPage({super.key});
@@ -19,7 +16,7 @@ class _ControlPageState extends State<ControlPage> {
   final screens = [
     const MyHomePage(),
     const CustomersPage(),
-    const FurnituresPage(),
+    const CategoriesPage(),
     const UserPage()
   ];
   @override
@@ -36,7 +33,7 @@ class _ControlPageState extends State<ControlPage> {
       iconSize: 30,
       fixedColor: Colors.brown[500],
       unselectedItemColor: Colors.black54,
-      type: BottomNavigationBarType.shifting,
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: (index) {
         setState(() {

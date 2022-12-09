@@ -1,8 +1,6 @@
-import 'package:cimenfurniture/screens/add_customer_view_model.dart';
+import 'package:cimenfurniture/viewmodels/add_customer_view_model.dart';
 import 'package:cimenfurniture/services/time_convert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 class AddCustomerView extends StatefulWidget {
@@ -43,12 +41,14 @@ class _AddCustomerViewState extends State<AddCustomerView> {
       create: (context) => AddCustomerViewModel(),
       builder: (context, child) => Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: const Text("Yeni Müşteri Ekle"),
         ),
         body: Form(
             key: _formKey,
             child: ListView(
-              padding: EdgeInsets.all(15),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(15),
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -77,6 +77,8 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                       },
                     ),
                     const SizedBox(height: 5),
+                    const Divider(color: Colors.black87),
+                    const SizedBox(height: 5),
                     TextFormField(
                         controller: surnameCtr,
                         cursorColor: Colors.black,
@@ -97,150 +99,14 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                             return null;
                           }
                         }),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                        controller: addressCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: const Icon(Icons.home_sharp, size: 40),
-                            hintText: "Adres",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Adres Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                        controller: priceCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon:
-                                const Icon(Icons.monetization_on, size: 40),
-                            hintText: "Fiyat",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Fiyat Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                        enableInteractiveSelection:
-                            false, //dismiss the selection tool when you click to the textformfield
-                        cursorWidth: 0,
-                        showCursor: false,
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(
-                              FocusNode()); //dismiss the keyboard when you click to the textformfield
-                          selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime(2024));
-
-                          dateOfTakingTheWorkCtr.text =
-                              TimeConvert.dateTimeToString(selectedDate!);
-                        },
-                        controller: dateOfTakingTheWorkCtr,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon:
-                                const Icon(Icons.date_range_sharp, size: 40),
-                            hintText: "İşi Alış Tarihi",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'İşi Alış Tarihi Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                        enableInteractiveSelection:
-                            false, //dismiss the selection tool when you click to the textformfield
-                        showCursor: false,
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(
-                              FocusNode()); //dismiss the keyboard when you click to the textformfield
-                          estimatedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime(2024));
-
-                          estimatedDeliveryDateCtr.text =
-                              TimeConvert.dateTimeToString(estimatedDate!);
-                        },
-                        controller: estimatedDeliveryDateCtr,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: const Icon(
-                                Icons.access_time_filled_sharp,
-                                size: 40),
-                            hintText: "Tahmini Teslim Tarihi",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Tahmini Teslim Tarihi Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                      controller: depositCtr,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                              borderSide:
-                                  const BorderSide(color: Colors.amberAccent)),
-                          prefixIcon:
-                              const Icon(Icons.price_check_sharp, size: 40),
-                          hintText: "Kapora",
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.0))),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<AddCustomerViewModel>().addNewCustomer(
-                              nameCtr.text,
-                              surnameCtr.text,
-                              int.parse(priceCtr.text),
-                              selectedDate,
-                              estimatedDate,
-                              int.parse(depositCtr.text),
-                              0,
-                              addressCtr.text,
-                              0);
+                                nameCtr.text,
+                                surnameCtr.text,
+                              );
 
                           Navigator.pop(context);
                         }

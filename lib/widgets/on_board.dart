@@ -36,14 +36,7 @@ class _OnBoardWidgetState extends State<OnBoardWidget> {
               ? const ControlPage()
               : const SignInPage();
         } else {
-          return Container(
-              alignment: Alignment.topCenter,
-              margin: const EdgeInsets.only(top: 20),
-              child: const CircularProgressIndicator(
-                value: 0.8,
-                backgroundColor: Colors.transparent,
-                color: Colors.brown,
-              ));
+          return SizedBox.shrink();
         }
       },
     );

@@ -1,53 +1,33 @@
+import 'package:cimenfurniture/models/works_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Customers {
   final String id;
   final String name;
   final String surname;
-  final int price;
-  final Timestamp dateOfTakingTheWork;
-  final Timestamp estimatedDeliveryDate;
-  final int deposit;
-  final int earning;
-  final String address;
-  final int cost;
+  final List<Works> works;
 
   Customers(
       {required this.id,
       required this.name,
       required this.surname,
-      required this.price,
-      required this.dateOfTakingTheWork,
-      required this.estimatedDeliveryDate,
-      required this.deposit,
-      this.earning = 0,
-      required this.address,
-      this.cost = 0});
+      this.works = const []});
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'name': name,
-        'surname': surname,
-        'price': price,
-        'dateOfTakingTheWork': dateOfTakingTheWork,
-        'estimatedDeliveryDate': estimatedDeliveryDate,
-        'deposit': deposit,
-        'earning': earning,
-        'address': address,
-        'cost': cost
-      };
+  Map<String, dynamic> toMap() {
+    List<Map<String, dynamic>> newWorks =
+        works.map((works) => works.toMap()).toList();
+
+    return {'id': id, 'name': name, 'surname': surname, 'works': newWorks};
+  }
 
   factory Customers.fromMap(Map map) {
+    var workListAsMap = map['works'] as List;
+    List<Works> works =
+        workListAsMap.map((workAsMap) => Works.fromMap(workAsMap)).toList();
     return Customers(
         id: map['id'],
-        address: map['address'],
-        cost: map['cost'],
-        dateOfTakingTheWork: map['dateOfTakingTheWork'],
-        deposit: map['deposit'],
-        earning: map['earning'],
-        estimatedDeliveryDate: map['estimatedDeliveryDate'],
         name: map['name'],
-        price: map['price'],
-        surname: map['surname']);
+        surname: map['surname'],
+        works: works);
   }
 }

@@ -2,7 +2,7 @@
     package="com.example.cimenfurniture">
    <application
         android:usesCleartextTraffic="true"
-        android:label="cimenfurniture"
+        android:label="CMN"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

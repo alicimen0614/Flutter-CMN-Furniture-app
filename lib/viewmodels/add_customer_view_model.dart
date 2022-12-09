@@ -9,26 +9,14 @@ class AddCustomerViewModel extends ChangeNotifier {
 
 //Creating a new customer object from the data of the formfields
   Future<void> addNewCustomer(
-      String name,
-      String surname,
-      int price,
-      DateTime dateOfTakingTheWork,
-      DateTime estimatedDeliveryDate,
-      int deposit,
-      int earning,
-      String address,
-      int cost) async {
+    String name,
+    String surname,
+  ) async {
     Customers customer = Customers(
         id: DateTime.now().toIso8601String(),
         name: name,
         surname: surname,
-        price: price,
-        dateOfTakingTheWork:
-            TimeConvert.datetimeToTimestamp(dateOfTakingTheWork),
-        estimatedDeliveryDate:
-            TimeConvert.datetimeToTimestamp(estimatedDeliveryDate),
-        deposit: deposit,
-        address: address);
+        works: []);
 
     //Insert the object to Firestore
     await _database.setCustomerData(
