@@ -1,11 +1,8 @@
 import 'package:cimenfurniture/screens/customers_page.dart';
-import 'package:cimenfurniture/screens/furnitures_page.dart';
+import 'package:cimenfurniture/screens/categories_page.dart';
 import 'package:cimenfurniture/screens/home_page.dart';
 import 'package:cimenfurniture/screens/user_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../services/auth.dart';
 
 class ControlPage extends StatefulWidget {
   const ControlPage({super.key});
@@ -19,42 +16,26 @@ class _ControlPageState extends State<ControlPage> {
   final screens = [
     const MyHomePage(),
     const CustomersPage(),
-    const FurnituresPage(),
+    const CategoriesPage(),
     const UserPage()
   ];
   @override
   Widget build(BuildContext context) {
+    print("controlpage çalıştı");
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              color: Colors.amber,
-              onPressed: () {
-                Provider.of<Auth>(context, listen: false).signOut();
-              },
-              icon: const Icon(Icons.logout))
-        ],
-        backgroundColor: Colors.grey[50],
-        title: const Text(
-          'CMN',
-          style: TextStyle(
-              color: Colors.amberAccent,
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic),
-        ),
-        centerTitle: true,
-      ),
       body: screens[currentIndex],
       bottomNavigationBar: bottomNavigationBarBuilder(),
     );
   }
 
   Widget bottomNavigationBarBuilder() {
+    double mediaQueryWidth = MediaQuery.of(context).size.width;
+    double mediaQueryHeight = MediaQuery.of(context).size.height;
     return BottomNavigationBar(
-      iconSize: 30,
+      iconSize: mediaQueryWidth * 0.073,
       fixedColor: Colors.brown[500],
       unselectedItemColor: Colors.black54,
-      type: BottomNavigationBarType.shifting,
+      type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       onTap: (index) {
         setState(() {

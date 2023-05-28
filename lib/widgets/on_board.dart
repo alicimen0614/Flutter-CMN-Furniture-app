@@ -15,26 +15,32 @@ class OnBoardWidget extends StatefulWidget {
 class _OnBoardWidgetState extends State<OnBoardWidget> {
   @override
   Widget build(BuildContext context) {
+    print("onboard çalıştı");
     final auth = Provider.of<Auth>(context, listen: false);
 
     return StreamBuilder<User?>(
       stream: auth.authStatus(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
-          print("snapshot active");
+          print("snapshota girdi");
           print(snapshot.data);
-          return snapshot.data != null
+          if (snapshot.data?.emailVerified == false &&
+              snapshot.data?.isAnonymous == false) {
+            Provider.of<Auth>(context).signOut();
+            print("çıkış yapıldı from onboard");
+          } else if (snapshot.data?.isAnonymous == true) {
+            return const ControlPage();
+          }
+
+          return snapshot.data != null && snapshot.data!.emailVerified != false
               ? const ControlPage()
               : const SignInPage();
         } else {
-          return Container(
-              alignment: Alignment.topCenter,
-              margin: EdgeInsets.only(top: 20),
-              child: const CircularProgressIndicator(
-                value: 0.8,
-                backgroundColor: Colors.transparent,
-                color: Colors.brown,
-              ));
+<<<<<<< HEAD
+          return const SizedBox.shrink();
+=======
+          return SizedBox.shrink();
+>>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
         }
       },
     );

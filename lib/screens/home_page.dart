@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -22,36 +25,120 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("homepage çalıştı");
     return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CarouselSlider.builder(
-            carouselController: controller,
-            options: CarouselOptions(
-                height: 400,
-                autoPlay: true,
-                autoPlayAnimationDuration: const Duration(seconds: 2),
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-                onPageChanged: (index, reason) => setState(
-                      () => activeIndex = index,
-                    )),
-            itemCount: homePageImages.length,
-            itemBuilder: (context, index, realIndex) {
-              final homePageimage = homePageImages[index];
+        backgroundColor: Colors.grey[100],
+<<<<<<< HEAD
+        body: Padding(
+          padding: const EdgeInsets.only(top: 50),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CarouselSlider.builder(
+                    carouselController: controller,
+                    options: CarouselOptions(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        autoPlay: true,
+                        autoPlayAnimationDuration: const Duration(seconds: 2),
+                        enableInfiniteScroll: false,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) => setState(
+                              () => activeIndex = index,
+                            )),
+                    itemCount: homePageImages.length,
+                    itemBuilder: (context, index, realIndex) {
+                      final homePageimage = homePageImages[index];
 
-              return buildImage(homePageimage, index);
-            },
+                      return buildImage(homePageimage, index);
+                    },
+                  ),
+                  SizedBox(
+                    height: (MediaQuery.of(context).size.height) * 0.0287,
+                  ),
+                  buildIndicator(),
+                  SizedBox(
+                    height: (MediaQuery.of(context).size.height) * 0.0115,
+                  ),
+                  Text("Bizi Instagram'dan takip edin.",
+                      style: GoogleFonts.kanit(
+                          textStyle: const TextStyle(fontSize: 20))),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            _launchUrl();
+                          },
+                          icon: const Icon(FontAwesomeIcons.instagram),
+                          iconSize: 50,
+                        ),
+                        Text(
+                          "|",
+                          style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.w100,
+                              fontFamily: GoogleFonts.abel().fontFamily),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "CMN",
+                          style: GoogleFonts.merriweather(
+                              textStyle: TextStyle(fontSize: 25)),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-          const SizedBox(
-            height: 25,
+        ));
+  }
+
+  final Uri url = Uri.parse('https://www.instagram.com/cmnmobilya/');
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+=======
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CarouselSlider.builder(
+                  carouselController: controller,
+                  options: CarouselOptions(
+                      height: 400,
+                      autoPlay: true,
+                      autoPlayAnimationDuration: const Duration(seconds: 2),
+                      enableInfiniteScroll: false,
+                      enlargeCenterPage: true,
+                      onPageChanged: (index, reason) => setState(
+                            () => activeIndex = index,
+                          )),
+                  itemCount: homePageImages.length,
+                  itemBuilder: (context, index, realIndex) {
+                    final homePageimage = homePageImages[index];
+
+                    return buildImage(homePageimage, index);
+                  },
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                buildIndicator()
+              ],
+            ),
           ),
-          buildIndicator()
-        ],
-      ),
-    ));
+        ));
+>>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
   }
 
   Widget buildImage(String homePageimage, int index) {
