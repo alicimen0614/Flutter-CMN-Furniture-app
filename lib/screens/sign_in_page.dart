@@ -1,4 +1,3 @@
-import 'package:cimenfurniture/main.dart';
 import 'package:cimenfurniture/widgets/sign_in_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +47,8 @@ class _SignInPageState extends State<SignInPage> {
     final user =
         await Provider.of<Auth>(context, listen: false).signInAnonymously();
 
-<<<<<<< HEAD
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
-=======
     if (!mounted) return;
     Navigator.pop(context);
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
   }
 
   Future<void>? _signInWithGoogle() async {
@@ -66,12 +61,8 @@ class _SignInPageState extends State<SignInPage> {
     final user =
         await Provider.of<Auth>(context, listen: false).signInWithGoogle();
 
-<<<<<<< HEAD
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
-=======
     if (!mounted) return;
     Navigator.pop(context);
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
   }
 
   @override
@@ -82,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
       resizeToAvoidBottomInset: false,
       body: Center(
           child: Padding(
-        padding: const EdgeInsets.only(bottom: 0, top: 20),
+        padding: const EdgeInsets.only(bottom: 20, top: 20),
         child: Container(
           padding: const EdgeInsets.only(bottom: 50),
           decoration: BoxDecoration(
@@ -205,17 +196,10 @@ class _SignInPageState extends State<SignInPage> {
                     final user = await Provider.of<Auth>(context, listen: false)
                         .signInWithEmailAndPassword(signInEmailController.text,
                             signInPasswordController.text);
-<<<<<<< HEAD
-                    if (user?.emailVerified == true) {
-                      navigatorKey.currentState!
-                          .popUntil((route) => route.isFirst);
-                    } else {
-=======
                     if (!mounted) return;
                     Navigator.pop(context);
 
                     if (!user!.emailVerified) {
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                       await _emailDialog();
                     }
                   }
@@ -297,8 +281,6 @@ class _SignInPageState extends State<SignInPage> {
                   return "Şifreniz 6-16 karakter arasında olmalıdır";
                 } else if (value != registerPasswordConfirmController.text) {
                   return 'Şifreler Uyuşmuyor';
-                } else if (value.contains(" ")) {
-                  return "Şifrede boşluk olamaz.";
                 } else {
                   return null;
                 }
@@ -327,8 +309,6 @@ class _SignInPageState extends State<SignInPage> {
                   return "Şifreniz 6-16 karakter arasında olmalıdır";
                 } else if (value != registerPasswordController.text) {
                   return 'Şifreler Uyuşmuyor';
-                } else if (value.contains(" ")) {
-                  return "Şifrede boşluk olamaz.";
                 } else {
                   return null;
                 }
@@ -472,11 +452,7 @@ class _SignInPageState extends State<SignInPage> {
                 Text(
                     'Lütfen e-posta adresinize giderek hesabınızı doğrulayınız.'),
                 Text(
-<<<<<<< HEAD
-                    'Onay linkine tıkladıkdan sonra bilgilerinizle giriş yapabilirsiniz.'),
-=======
                     'Onay linkine tıklatıkdan sonra bilgilerinizle giriş yapabilirsiniz.'),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
               ],
             ),
           ),

@@ -4,11 +4,6 @@ import 'package:cimenfurniture/viewmodels/customers_page_model.dart';
 import 'package:cimenfurniture/viewmodels/detailed_customer_view_model.dart';
 import 'package:cimenfurniture/screens/detailed_work_view.dart';
 import 'package:cimenfurniture/services/time_convert.dart';
-<<<<<<< HEAD
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/works_model.dart';
-=======
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +11,6 @@ import 'package:cimenfurniture/services/database.dart';
 
 import '../models/works_model.dart';
 import '../services/auth.dart';
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
 enum FormStatus { detailedCustomer, works }
 
@@ -36,14 +30,11 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
   var estimatedDate;
   TextEditingController nameCtr = TextEditingController();
   TextEditingController surnameCtr = TextEditingController();
-<<<<<<< HEAD
-=======
   TextEditingController priceCtr = TextEditingController();
   TextEditingController dateOfTakingTheWorkCtr = TextEditingController();
   TextEditingController estimatedDeliveryDateCtr = TextEditingController();
   TextEditingController depositCtr = TextEditingController();
   TextEditingController addressCtr = TextEditingController();
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
   final _formKey = GlobalKey<FormState>();
 
@@ -51,14 +42,11 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
   void dispose() {
     nameCtr.dispose();
     surnameCtr.dispose();
-<<<<<<< HEAD
-=======
     priceCtr.dispose();
     dateOfTakingTheWorkCtr.dispose();
     estimatedDeliveryDateCtr.dispose();
     depositCtr.dispose();
     addressCtr.dispose();
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
     super.dispose();
   }
 
@@ -84,8 +72,6 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                           ));
                     },
                     backgroundColor: Colors.amber,
-
-                    foregroundColor: Colors.white,
                     child: const Icon(Icons.add),
                   )
                 : null,
@@ -119,11 +105,7 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
               ),
             ]),
             body: SingleChildScrollView(
-<<<<<<< HEAD
-              physics: const BouncingScrollPhysics(),
-=======
               physics: BouncingScrollPhysics(),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
               child: Column(children: [
                 const SizedBox(
                   height: 15,
@@ -286,11 +268,7 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
           .getNewCustomer(widget.customer.id),
       builder: (context, snapshotOfStream) => ListView.separated(
           reverse: true,
-<<<<<<< HEAD
-          padding: const EdgeInsets.all(10),
-=======
           padding: EdgeInsets.all(10),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {

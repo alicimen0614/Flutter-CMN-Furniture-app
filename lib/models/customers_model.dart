@@ -1,8 +1,5 @@
 import 'package:cimenfurniture/models/works_model.dart';
-<<<<<<< HEAD
-=======
 import 'package:cloud_firestore/cloud_firestore.dart';
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
 class Customers {
   final String id;

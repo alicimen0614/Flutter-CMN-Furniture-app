@@ -6,36 +6,14 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    double mediaQueryWidth = MediaQuery.of(context).size.width;
-    double mediaQueryHeight = MediaQuery.of(context).size.height;
-    List<String> products = [
-=======
     List<String> Products = [
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
       "Mutfak",
       "Yatak Odası",
       "Oturma Odası",
       "Çalışma Odası",
       "Antre",
       "Ofis",
-<<<<<<< HEAD
-      "Salon",
-      "Banyo",
-    ];
-
-    List<String> storagePaths = [
-      "mutfak",
-      "yatak_odası",
-      "oturma_odası",
-      "çalışma_odası",
-      "antre",
-      "ofis",
-      "salon",
-      "banyo"
-=======
       "Salon"
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
     ];
     List<String> categoriesImages = [
       'lib/images/mutfak2.jpg',
@@ -45,10 +23,6 @@ class CategoriesPage extends StatelessWidget {
       'lib/images/antre.jpg',
       'lib/images/ofis_odası.jpg',
       'lib/images/salon1.jpg',
-<<<<<<< HEAD
-      'lib/images/banyo_resized.jpg'
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
     ];
 
     return Scaffold(
@@ -57,84 +31,6 @@ class CategoriesPage extends StatelessWidget {
           centerTitle: true,
         ),
         body: ListView(
-<<<<<<< HEAD
-          physics: const BouncingScrollPhysics(),
-          children: [
-            Padding(
-              padding: EdgeInsets.all(mediaQueryWidth * 0.012),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: mediaQueryHeight * 0.014,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardOfCategories(
-                        text: products[0],
-                        imagelocation: categoriesImages[0],
-                        storagePath: storagePaths[0],
-                      ),
-                      CardOfCategories(
-                          text: products[1],
-                          imagelocation: categoriesImages[1],
-                          storagePath: storagePaths[1]),
-                    ],
-                  ),
-                  Divider(
-                      color: Colors.black87,
-                      endIndent: mediaQueryWidth * 0.021,
-                      indent: mediaQueryWidth * 0.021),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardOfCategories(
-                          text: products[2],
-                          imagelocation: categoriesImages[2],
-                          storagePath: storagePaths[2]),
-                      CardOfCategories(
-                          text: products[3],
-                          imagelocation: categoriesImages[3],
-                          storagePath: storagePaths[3]),
-                    ],
-                  ),
-                  Divider(
-                      color: Colors.black87,
-                      endIndent: mediaQueryWidth * 0.021,
-                      indent: mediaQueryWidth * 0.021),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardOfCategories(
-                          text: products[4],
-                          imagelocation: categoriesImages[4],
-                          storagePath: storagePaths[4]),
-                      CardOfCategories(
-                          text: products[5],
-                          imagelocation: categoriesImages[5],
-                          storagePath: storagePaths[5]),
-                    ],
-                  ),
-                  Divider(
-                      color: Colors.black87,
-                      endIndent: mediaQueryWidth * 0.021,
-                      indent: mediaQueryWidth * 0.021),
-                  CardOfCategories(
-                      text: products[6],
-                      imagelocation: categoriesImages[6],
-                      storagePath: storagePaths[6]),
-                  Divider(
-                      color: Colors.black87,
-                      endIndent: mediaQueryWidth * 0.021,
-                      indent: mediaQueryWidth * 0.021),
-                  CardOfCategories(
-                      text: products[7],
-                      imagelocation: categoriesImages[7],
-                      storagePath: storagePaths[7]),
-                ],
-              ),
-=======
           physics: BouncingScrollPhysics(),
           children: [
             Column(
@@ -184,7 +80,6 @@ class CategoriesPage extends StatelessWidget {
                 CardOfCategories(
                     text: Products[6], imagelocation: categoriesImages[6])
               ],
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
             )
           ],
         ));

@@ -36,11 +36,7 @@ class _OnBoardWidgetState extends State<OnBoardWidget> {
               ? const ControlPage()
               : const SignInPage();
         } else {
-<<<<<<< HEAD
-          return const SizedBox.shrink();
-=======
           return SizedBox.shrink();
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
         }
       },
     );
