@@ -1,8 +1,5 @@
 import 'package:cimenfurniture/viewmodels/customers_page_model.dart';
-<<<<<<< HEAD
 import 'package:cimenfurniture/viewmodels/detailed_categories_view_model.dart';
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 import 'package:cimenfurniture/viewmodels/detailed_customer_view_model.dart';
 import 'package:cimenfurniture/viewmodels/detailed_work_view_model.dart';
 import 'package:cimenfurniture/services/auth.dart';
@@ -38,7 +35,6 @@ class _MyAppState extends State<MyApp> {
             create: (context) => DetailedCustomerViewModel()),
         ChangeNotifierProvider(
           create: (context) => DetailedWorkViewModel(),
-<<<<<<< HEAD
         ),
         ChangeNotifierProvider(
           create: (context) => DetailedCategoriesViewModel(),
@@ -57,16 +53,6 @@ class _MyAppState extends State<MyApp> {
               elevatedButtonTheme: ElevatedButtonThemeData(
                   style:
                       ElevatedButton.styleFrom(foregroundColor: Colors.white))),
-=======
-        )
-      ],
-      child: MaterialApp(
-          theme: ThemeData().copyWith(
-            colorScheme: ThemeData().colorScheme.copyWith(
-                  primary: Colors.amber,
-                ),
-          ),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
           home: FutureBuilder(
             future: _initialization,
             builder: (context, snapshot) {

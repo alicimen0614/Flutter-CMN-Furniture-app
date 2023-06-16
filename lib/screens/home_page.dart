@@ -28,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print("homepage çalıştı");
     return Scaffold(
         backgroundColor: Colors.grey[100],
-<<<<<<< HEAD
         body: Padding(
           padding: const EdgeInsets.only(top: 50),
           child: Center(
@@ -106,39 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $url';
     }
-=======
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CarouselSlider.builder(
-                  carouselController: controller,
-                  options: CarouselOptions(
-                      height: 400,
-                      autoPlay: true,
-                      autoPlayAnimationDuration: const Duration(seconds: 2),
-                      enableInfiniteScroll: false,
-                      enlargeCenterPage: true,
-                      onPageChanged: (index, reason) => setState(
-                            () => activeIndex = index,
-                          )),
-                  itemCount: homePageImages.length,
-                  itemBuilder: (context, index, realIndex) {
-                    final homePageimage = homePageImages[index];
-
-                    return buildImage(homePageimage, index);
-                  },
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                buildIndicator()
-              ],
-            ),
-          ),
-        ));
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
   }
 
   Widget buildImage(String homePageimage, int index) {

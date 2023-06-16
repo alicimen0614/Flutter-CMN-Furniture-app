@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import 'package:cached_network_image/cached_network_image.dart';
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 import 'package:cimenfurniture/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +12,12 @@ class UserPage extends StatelessWidget {
     bool isAnonymous = user?.isAnonymous as bool;
 
     return Scaffold(
-<<<<<<< HEAD
       backgroundColor: Colors.amberAccent.shade400,
-=======
-      backgroundColor: Colors.amber,
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
       body: SafeArea(
           child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-<<<<<<< HEAD
             user!.photoURL != null
                 ? ClipOval(
                     child: CachedNetworkImage(
@@ -41,15 +33,6 @@ class UserPage extends StatelessWidget {
                           const Icon(Icons.error),
                     ),
                   )
-=======
-            isAnonymous == false
-                ? ClipOval(
-                    child: Image.network(
-                    user!.photoURL as String,
-                    fit: BoxFit.cover,
-                    height: 150,
-                  ))
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                 : ClipOval(
                     child:
                         Image.asset('lib/images/user.png', fit: BoxFit.cover),
@@ -61,7 +44,6 @@ class UserPage extends StatelessWidget {
               margin:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
               child: ListTile(
-<<<<<<< HEAD
                   leading: const Icon(
                     Icons.person,
                     color: Colors.teal,
@@ -79,20 +61,6 @@ class UserPage extends StatelessWidget {
                             fontSize: 20,
                           ),
                         )),
-=======
-                leading: const Icon(
-                  Icons.person,
-                  color: Colors.teal,
-                ),
-                title: isAnonymous == false
-                    ? Text(
-                        user!.displayName as String,
-                        style: TextStyle(
-                            fontSize: 20, color: Colors.teal.shade900),
-                      )
-                    : const Text("Anonim"),
-              ),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
             ),
             Card(
               margin:
@@ -102,22 +70,12 @@ class UserPage extends StatelessWidget {
                   Icons.mail,
                   color: Colors.teal,
                 ),
-<<<<<<< HEAD
                 title: user.email != null
                     ? Text(
                         user.email as String,
                         style: const TextStyle(fontSize: 20),
                       )
                     : const Text("********"),
-=======
-                title: isAnonymous == false
-                    ? Text(
-                        user!.email as String,
-                        style: TextStyle(
-                            fontSize: 20, color: Colors.teal.shade900),
-                      )
-                    : Text("********"),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
               ),
             ),
             SizedBox(

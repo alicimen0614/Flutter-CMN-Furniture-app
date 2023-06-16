@@ -1,9 +1,5 @@
 import 'package:cimenfurniture/models/customers_model.dart';
 import 'package:cimenfurniture/services/database.dart';
-<<<<<<< HEAD
-=======
-import 'package:cimenfurniture/services/time_convert.dart';
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

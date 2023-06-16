@@ -77,7 +77,12 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                   AppBar(centerTitle: true, title: Text(widget.categoryName)),
               body: RefreshIndicator(
                 onRefresh: refresh,
-                child: ListView.builder(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisExtent: 200,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 20,
+                  ),
                   physics: const BouncingScrollPhysics(),
                   itemCount: files.length,
                   itemBuilder: (context, index) {
@@ -92,22 +97,10 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                             print("2. future çalıştı");
                             return Padding(
                                 padding: const EdgeInsets.all(15),
-                                child: Dismissible(
-                                  onDismissed: (direction) async {
-                                    await _emailDialog(
-                                        widget.filePath, file.name);
-                                  },
-                                  background: Container(
-                                    padding: const EdgeInsets.all(25),
-                                    alignment: Alignment.centerRight,
-                                    color: Colors.redAccent,
-                                    child: const Icon(Icons.delete,
-                                        size: 75, color: Colors.white),
-                                  ),
-                                  key: ObjectKey(file),
-                                  child: CachedNetworkImage(
-                                    imageUrl: futureSnapshot.data as String,
-                                  ),
+                                child: CachedNetworkImage(
+                                  imageUrl: futureSnapshot.data as String,
+                                  height: 200,
+                                  width: 200,
                                 ));
                           } else if (futureSnapshot.hasError) {
                             return Center(

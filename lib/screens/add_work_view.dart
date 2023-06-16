@@ -1,9 +1,4 @@
 import 'package:cimenfurniture/models/customers_model.dart';
-<<<<<<< HEAD
-=======
-import 'package:cimenfurniture/viewmodels/add_customer_view_model.dart';
-import 'package:cimenfurniture/screens/detailed_customer_view.dart';
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 import 'package:cimenfurniture/services/time_convert.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +25,7 @@ class _AddWorkViewState extends State<AddWorkView> {
   TextEditingController estimatedDeliveryDateCtr = TextEditingController();
   TextEditingController depositCtr = TextEditingController();
   TextEditingController addressCtr = TextEditingController();
-<<<<<<< HEAD
   TextEditingController notesCtr = TextEditingController();
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
   final _formKey = GlobalKey<FormState>();
 
@@ -49,11 +41,8 @@ class _AddWorkViewState extends State<AddWorkView> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     double mediaQueryWidth = MediaQuery.of(context).size.width;
     double mediaQueryHeight = MediaQuery.of(context).size.height;
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
     List<Works> workList = widget.customer.works;
     return ChangeNotifierProvider<AddWorkViewModel>(
       create: (context) => AddWorkViewModel(),
@@ -65,12 +54,7 @@ class _AddWorkViewState extends State<AddWorkView> {
         body: Form(
             key: _formKey,
             child: ListView(
-<<<<<<< HEAD
               padding: EdgeInsets.all(mediaQueryWidth * 0.036),
-=======
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(15),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,12 +67,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 borderSide: const BorderSide(
                                     color: Colors.amberAccent)),
-<<<<<<< HEAD
                             prefixIcon: Icon(Icons.home_sharp,
                                 size: mediaQueryWidth * 0.1),
-=======
-                            prefixIcon: const Icon(Icons.home_sharp, size: 40),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                             hintText: "Adres",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0))),
@@ -99,15 +79,9 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-<<<<<<< HEAD
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-=======
-                    const SizedBox(height: 5),
-                    const Divider(color: Colors.black87),
-                    const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                     TextFormField(
                         controller: priceCtr,
                         cursorColor: Colors.black,
@@ -116,13 +90,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 borderSide: const BorderSide(
                                     color: Colors.amberAccent)),
-<<<<<<< HEAD
                             prefixIcon: Icon(Icons.monetization_on,
                                 size: mediaQueryWidth * 0.1),
-=======
-                            prefixIcon:
-                                const Icon(Icons.monetization_on, size: 40),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                             hintText: "Fiyat",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0))),
@@ -133,15 +102,9 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-<<<<<<< HEAD
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-=======
-                    const SizedBox(height: 5),
-                    const Divider(color: Colors.black87),
-                    const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                     TextFormField(
                         enableInteractiveSelection:
                             false, //dismiss the selection tool when you click to the textformfield
@@ -168,13 +131,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 borderSide: const BorderSide(
                                     color: Colors.amberAccent)),
-<<<<<<< HEAD
                             prefixIcon: Icon(Icons.date_range_sharp,
                                 size: mediaQueryWidth * 0.1),
-=======
-                            prefixIcon:
-                                const Icon(Icons.date_range_sharp, size: 40),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                             hintText: "İşi Alış Tarihi",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0))),
@@ -185,15 +143,9 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-<<<<<<< HEAD
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-=======
-                    const SizedBox(height: 5),
-                    const Divider(color: Colors.black87),
-                    const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                     TextFormField(
                         enableInteractiveSelection:
                             false, //dismiss the selection tool when you click to the textformfield
@@ -218,14 +170,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 borderSide: const BorderSide(
                                     color: Colors.amberAccent)),
-<<<<<<< HEAD
                             prefixIcon: Icon(Icons.access_time_filled_sharp,
                                 size: mediaQueryWidth * 0.1),
-=======
-                            prefixIcon: const Icon(
-                                Icons.access_time_filled_sharp,
-                                size: 40),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                             hintText: "Tahmini Teslim Tarihi",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0))),
@@ -236,15 +182,9 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-<<<<<<< HEAD
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-=======
-                    const SizedBox(height: 5),
-                    const Divider(color: Colors.black87),
-                    const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                     TextFormField(
                         controller: depositCtr,
                         cursorColor: Colors.black,
@@ -253,13 +193,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                                 borderRadius: BorderRadius.circular(50.0),
                                 borderSide: const BorderSide(
                                     color: Colors.amberAccent)),
-<<<<<<< HEAD
                             prefixIcon: Icon(Icons.price_check_sharp,
                                 size: mediaQueryWidth * 0.1),
-=======
-                            prefixIcon:
-                                const Icon(Icons.price_check_sharp, size: 40),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                             hintText: "Kapora",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(50.0))),
@@ -270,7 +205,6 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-<<<<<<< HEAD
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
@@ -297,11 +231,6 @@ class _AddWorkViewState extends State<AddWorkView> {
                             return null;
                           }
                         }),
-=======
-                    const SizedBox(
-                      height: 20,
-                    ),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -311,12 +240,8 @@ class _AddWorkViewState extends State<AddWorkView> {
                               dateOfTakingTheWork: selectedDateAsTimestamp,
                               estimatedDeliveryDate: estimatedDateAsTimestamp,
                               deposit: int.parse(depositCtr.text),
-<<<<<<< HEAD
                               address: addressCtr.text,
                               notes: notesCtr.text);
-=======
-                              address: addressCtr.text);
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
                           workList.add(newWork);
 
@@ -332,15 +257,9 @@ class _AddWorkViewState extends State<AddWorkView> {
                                   RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40.0),
                       ))),
-<<<<<<< HEAD
                       child: Text(
                         "Kaydet",
                         style: TextStyle(fontSize: mediaQueryWidth * 0.053),
-=======
-                      child: const Text(
-                        "Kaydet",
-                        style: TextStyle(fontSize: 22),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                       ),
                     ),
                   ],

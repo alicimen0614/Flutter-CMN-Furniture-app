@@ -24,10 +24,7 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
   TextEditingController estimatedDeliveryDateCtr = TextEditingController();
   TextEditingController depositCtr = TextEditingController();
   TextEditingController addressCtr = TextEditingController();
-<<<<<<< HEAD
   TextEditingController notesCtr = TextEditingController();
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
 
   final _formKey = GlobalKey<FormState>();
 
@@ -43,10 +40,7 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     notesCtr.text = widget.work.notes;
-=======
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
     DateTime dateOfTakingTheWorkAsDateTime =
         TimeConvert.datetimeFromTimestamp(widget.work.dateOfTakingTheWork);
 
@@ -150,15 +144,9 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                           return null;
                         }
                       }),
-<<<<<<< HEAD
                   const SizedBox(height: 3),
                   const Divider(color: Colors.black87),
                   const SizedBox(height: 3),
-=======
-                  const SizedBox(height: 5),
-                  const Divider(color: Colors.black87),
-                  const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                   TextFormField(
                       enableInteractiveSelection:
                           false, //dismiss the selection tool when you click to the textformfield
@@ -195,15 +183,9 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                           return null;
                         }
                       }),
-<<<<<<< HEAD
                   const SizedBox(height: 3),
                   const Divider(color: Colors.black87),
                   const SizedBox(height: 3),
-=======
-                  const SizedBox(height: 5),
-                  const Divider(color: Colors.black87),
-                  const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                   TextFormField(
                       enableInteractiveSelection:
                           false, //dismiss the selection tool when you click to the textformfield
@@ -239,15 +221,9 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                           return null;
                         }
                       }),
-<<<<<<< HEAD
                   const SizedBox(height: 3),
                   const Divider(color: Colors.black87),
                   const SizedBox(height: 3),
-=======
-                  const SizedBox(height: 5),
-                  const Divider(color: Colors.black87),
-                  const SizedBox(height: 5),
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                   TextFormField(
                       controller: depositCtr,
                       cursorColor: Colors.black,
@@ -268,7 +244,6 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                           return null;
                         }
                       }),
-<<<<<<< HEAD
                   const SizedBox(height: 5),
                   const Divider(color: Colors.black87),
                   const SizedBox(height: 5),
@@ -295,10 +270,6 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                       }),
                   SizedBox(
                     height: 3,
-=======
-                  SizedBox(
-                    height: 20,
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -318,12 +289,8 @@ class _DetailedWorkViewState extends State<DetailedWorkView> {
                                 TimeConvert.datetimeToTimestamp(
                                     tempDateforDelivery),
                             deposit: int.parse(depositCtr.text),
-<<<<<<< HEAD
                             address: addressCtr.text,
                             notes: notesCtr.text);
-=======
-                            address: addressCtr.text);
->>>>>>> a5d1808f01d6383a47a3cfb3aca2795f8e311165
                         print(updatedWorks.dateOfTakingTheWork);
 
                         context.read<DetailedWorkViewModel>().updateNewWork(
