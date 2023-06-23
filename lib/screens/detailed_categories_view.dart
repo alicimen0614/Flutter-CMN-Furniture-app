@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cimenfurniture/screens/photo_view_page.dart';
 import 'package:cimenfurniture/viewmodels/detailed_categories_view_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 
 class DetailedCategoriesView extends StatefulWidget {
@@ -24,12 +26,11 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
   File? image;
   late String randomName;
   bool isLongClicked = false;
+  List<String> imageLinks = [];
+  int length = 0;
 
   String createRandomName() {
-    int random = Random().nextInt(1000000);
-    String random2 = DateTime.now().microsecondsSinceEpoch.toString();
-    randomName = "$random$random2";
-    return randomName;
+    return randomName = DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   Future pickImage(ImageSource source) async {
@@ -59,14 +60,17 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ListResult>(
-        future: context
+    return StreamBuilder<List<String>>(
+        stream: context
             .read<DetailedCategoriesViewModel>()
-            .listAllFiles(widget.filePath),
+            .listOfImages(widget.filePath),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print("ilk future çalıştı");
-            final files = snapshot.data!.items;
+            length = snapshot.data!.length;
+            print("ilk stream çalıştı");
+
+            final images = snapshot.data;
+
             return Scaffold(
               floatingActionButton: FloatingActionButton(
                   child: const Icon(Icons.add_a_photo_rounded,
@@ -78,40 +82,39 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
               body: RefreshIndicator(
                 onRefresh: refresh,
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    mainAxisExtent: 200,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 20,
                   ),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: files.length,
+                  padding: EdgeInsets.all(1),
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: images!.length,
                   itemBuilder: (context, index) {
-                    Color color = Colors.white;
-                    final file = files[index];
-                    return FutureBuilder(
-                        future: context
-                            .read<DetailedCategoriesViewModel>()
-                            .getImageUrl(widget.filePath, file.name),
-                        builder: (context, futureSnapshot) {
-                          if (futureSnapshot.hasData) {
-                            print("2. future çalıştı");
-                            return Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: CachedNetworkImage(
-                                  imageUrl: futureSnapshot.data as String,
-                                  height: 200,
-                                  width: 200,
-                                ));
-                          } else if (futureSnapshot.hasError) {
-                            return Center(
-                              child: Text(futureSnapshot.error.toString()),
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        });
+                    imageLinks = snapshot.data!;
+                    return Padding(
+                      padding: const EdgeInsets.all(0.5),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((_) => PhotoViewPage(
+                                        index: index,
+                                        filePath: widget.filePath,
+                                      ))));
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: snapshot.data![index],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey,
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.red.shade400,
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -209,5 +212,14 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                 ])),
           )
         ]);
+  }
+
+  void deleteImage(int index, BuildContext context) {
+    print("deleteImage'e girdi");
+    Future(
+      () => context
+          .read<DetailedCategoriesViewModel>()
+          .getImageNameAndDelete(widget.filePath, imageLinks[index]),
+    );
   }
 }
