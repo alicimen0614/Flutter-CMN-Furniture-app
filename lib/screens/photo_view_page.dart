@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -18,13 +19,15 @@ class PhotoViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream:
-            context.read<DetailedCategoriesViewModel>().listOfImages(filePath),
-        builder: (context, listOfImages) {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: context
+            .read<DetailedCategoriesViewModel>()
+            .getImageUrlsFromFirebase(filePath),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> listOfImages) {
           print("galeri stream girdi");
           if (listOfImages.hasData) {
-            imageLinks = listOfImages.data as List<String>;
+            Map mapOfImages = listOfImages.data!.data() as Map;
+            List listOfImageUrls = mapOfImages.values.toList().first;
             return Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBar(
@@ -32,7 +35,7 @@ class PhotoViewPage extends StatelessWidget {
                 elevation: 0,
                 actions: [
                   IconButton(
-                      onPressed: (() => deleteImage(index, context)),
+                      onPressed: (() => deleteImage(context, listOfImageUrls)),
                       icon: Icon(Icons.delete))
                 ],
               ),
@@ -41,11 +44,11 @@ class PhotoViewPage extends StatelessWidget {
                   index = galleyIndex;
                   print("$galleyIndex -- $index");
                 },
-                itemCount: imageLinks.length,
+                itemCount: listOfImageUrls.length,
                 builder: ((context, index) =>
                     PhotoViewGalleryPageOptions.customChild(
                         child: CachedNetworkImage(
-                          imageUrl: imageLinks[index],
+                          imageUrl: listOfImageUrls[index],
                           placeholder: (context, url) => Container(
                             color: Colors.grey,
                           ),
@@ -73,12 +76,34 @@ class PhotoViewPage extends StatelessWidget {
         });
   }
 
-  void deleteImage(int index, BuildContext context) {
-    print("deleteImage'e girdi");
+  void deleteImage(BuildContext context, List<dynamic> listOfImageUrls) {
+/* ı played with the indexes in here because when ı delete an image the index stays the same in the gallery even if its not. 
+so ı figured it with this: if the index is the last index decrease 1 because in the gallery when you delete the last image it moves to the
+one before it. If its not the last index don't change the it because when you delete an image the index stays the same and the image next to
+that image is now the new image on that index :)  */
     Future(
       () => context
           .read<DetailedCategoriesViewModel>()
-          .getImageNameAndDelete(filePath, imageLinks[index]),
+          .getImageNameAndDelete(filePath, listOfImageUrls[index])
+          .whenComplete(() {
+        ScaffoldMessenger.of(context).showSnackBar(snackBar());
+        if (index == listOfImageUrls.length - 1) {
+          index = index - 1;
+        }
+        if (index == -1) {
+          Navigator.pop(context);
+        }
+      }),
+    );
+  }
+
+  SnackBar snackBar() {
+    return SnackBar(
+      content: const Text('Fotoğraf başarılı bir şekilde silindi!'),
+      action: SnackBarAction(
+        label: 'Tamam',
+        onPressed: () {},
+      ),
     );
   }
 }

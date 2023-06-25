@@ -1,14 +1,12 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cimenfurniture/screens/photo_view_page.dart';
 import 'package:cimenfurniture/viewmodels/detailed_categories_view_model.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 
 class DetailedCategoriesView extends StatefulWidget {
@@ -25,9 +23,7 @@ class DetailedCategoriesView extends StatefulWidget {
 class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
   File? image;
   late String randomName;
-  bool isLongClicked = false;
-  List<String> imageLinks = [];
-  int length = 0;
+  late String urlOfUploadedImage;
 
   String createRandomName() {
     return randomName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -44,32 +40,32 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
         this.image = imageTemporary;
       });
       if (!mounted) return;
-      await context
+      urlOfUploadedImage = await context
           .read<DetailedCategoriesViewModel>()
           .uploadFile(createRandomName(), widget.filePath, File(image.path));
-      setState(() {});
+      if (!mounted) return;
+
+      await context
+          .read<DetailedCategoriesViewModel>()
+          .addImageUrlToFireStore(widget.filePath, urlOfUploadedImage);
     } on PlatformException catch (e) {
       print('Failed to take image $image');
     }
   }
 
-  Future refresh() async {
-    setState(() {});
-    return await Future.delayed(const Duration(seconds: 0));
-  }
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<String>>(
+    return StreamBuilder<DocumentSnapshot>(
         stream: context
             .read<DetailedCategoriesViewModel>()
-            .listOfImages(widget.filePath),
-        builder: (context, snapshot) {
+            .getImageUrlsFromFirebase(widget.filePath),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasData) {
-            length = snapshot.data!.length;
-            print("ilk stream çalıştı");
+            Map mapOfImages = snapshot.data!.data() as Map;
 
-            final images = snapshot.data;
+            List listOfImageUrls = mapOfImages.values.toList().first;
+
+            print("ilk stream çalıştı");
 
             return Scaffold(
               floatingActionButton: FloatingActionButton(
@@ -79,44 +75,40 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                       context: context, builder: (context) => buildSheet())),
               appBar:
                   AppBar(centerTitle: true, title: Text(widget.categoryName)),
-              body: RefreshIndicator(
-                onRefresh: refresh,
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                  ),
-                  padding: EdgeInsets.all(1),
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  itemCount: images!.length,
-                  itemBuilder: (context, index) {
-                    imageLinks = snapshot.data!;
-                    return Padding(
-                      padding: const EdgeInsets.all(0.5),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((_) => PhotoViewPage(
-                                        index: index,
-                                        filePath: widget.filePath,
-                                      ))));
-                        },
-                        child: CachedNetworkImage(
-                          imageUrl: snapshot.data![index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey,
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.red.shade400,
-                          ),
+              body: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                padding: EdgeInsets.all(1),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                itemCount: listOfImageUrls.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(0.5),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((_) => PhotoViewPage(
+                                      index: index,
+                                      filePath: widget.filePath,
+                                    ))));
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: listOfImageUrls[index],
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey,
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.red.shade400,
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             );
           } else if (snapshot.hasError) {
@@ -212,14 +204,5 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                 ])),
           )
         ]);
-  }
-
-  void deleteImage(int index, BuildContext context) {
-    print("deleteImage'e girdi");
-    Future(
-      () => context
-          .read<DetailedCategoriesViewModel>()
-          .getImageNameAndDelete(widget.filePath, imageLinks[index]),
-    );
   }
 }
