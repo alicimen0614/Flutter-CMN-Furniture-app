@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cimenfurniture/models/works_model.dart';
 
 class Customers {
@@ -5,18 +7,26 @@ class Customers {
   final String name;
   final String surname;
   final List<Works> works;
+  final bool isDone;
 
   Customers(
       {required this.id,
       required this.name,
       required this.surname,
-      this.works = const []});
+      this.works = const [],
+      this.isDone = false});
 
   Map<String, dynamic> toMap() {
     List<Map<String, dynamic>> newWorks =
         works.map((works) => works.toMap()).toList();
 
-    return {'id': id, 'name': name, 'surname': surname, 'works': newWorks};
+    return {
+      'id': id,
+      'name': name,
+      'surname': surname,
+      'works': newWorks,
+      'isDone': isDone
+    };
   }
 
   factory Customers.fromMap(Map map) {
@@ -27,6 +37,7 @@ class Customers {
         id: map['id'],
         name: map['name'],
         surname: map['surname'],
-        works: works);
+        works: works,
+        isDone: map['isDone']);
   }
 }

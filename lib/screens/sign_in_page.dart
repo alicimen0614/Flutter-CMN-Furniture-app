@@ -66,6 +66,8 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     print("signin page çalıştı");
     return Scaffold(
       backgroundColor: Colors.amber,
@@ -77,8 +79,8 @@ class _SignInPageState extends State<SignInPage> {
           padding: const EdgeInsets.only(bottom: 50),
           decoration: BoxDecoration(
               color: Colors.grey[200], borderRadius: BorderRadius.circular(25)),
-          height: 600,
-          width: 350,
+          height: height * 0.688,
+          width: width * 0.89,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -90,25 +92,17 @@ class _SignInPageState extends State<SignInPage> {
                         ? buildRegisterForm()
                         : buildResetForm(),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SignInButton(
-                      color: Colors.orangeAccent,
-                      onPressed: _signInAnonymously,
-                      child: const Text(
-                        "Anonim Giriş",
-                        style: TextStyle(color: Colors.black),
-                      )),
-                  const SizedBox(
-                    width: 40,
+              SignInButton(
+                color: Colors.blue.shade700,
+                onPressed: _signInWithGoogle,
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Image.asset("lib/images/google512.png",
+                      height: height * 0.034),
+                  SizedBox(
+                    width: width * 0.02,
                   ),
-                  SignInButton(
-                    color: Colors.redAccent,
-                    onPressed: _signInWithGoogle,
-                    child: const Text("Google ile giriş"),
-                  )
-                ],
+                  const Text("Google ile giriş")
+                ]),
               ),
             ],
           ),
@@ -118,16 +112,18 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Form buildSignInForm() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     final signInFormKey = GlobalKey<FormState>();
     return Form(
         key: signInFormKey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text(
+          Text(
             "Giriş Yap",
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: width * 0.063),
           ),
-          const SizedBox(
-            height: 25,
+          SizedBox(
+            height: height * 0.028,
           ),
           TextFormField(
             controller: signInEmailController,
@@ -152,8 +148,8 @@ class _SignInPageState extends State<SignInPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0))),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: height * 0.011,
           ),
           TextFormField(
             controller: signInPasswordController,
@@ -178,11 +174,11 @@ class _SignInPageState extends State<SignInPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0))),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: height * 0.011,
           ),
           SizedBox(
-            width: 200,
+            width: width * 0.51,
             child: SignInButton(
                 color: Colors.amber,
                 onPressed: () async {
@@ -232,6 +228,8 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Form buildRegisterForm() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     print("registerform çaıştı");
     final registerFormKey = GlobalKey<FormState>();
 
@@ -240,12 +238,12 @@ class _SignInPageState extends State<SignInPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Kayıt Ol",
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: width * 0.063),
             ),
-            const SizedBox(
-              height: 25,
+            SizedBox(
+              height: height * 0.028,
             ),
             TextFormField(
               controller: registerEmailController,
@@ -270,8 +268,8 @@ class _SignInPageState extends State<SignInPage> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: height * 0.011,
             ),
             TextFormField(
               controller: registerPasswordController,
@@ -300,8 +298,8 @@ class _SignInPageState extends State<SignInPage> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: height * 0.011,
             ),
             TextFormField(
               controller: registerPasswordConfirmController,
@@ -330,11 +328,11 @@ class _SignInPageState extends State<SignInPage> {
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
             ),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: height * 0.011,
             ),
             SizedBox(
-              width: 200,
+              width: width * 0.51,
               child: SignInButton(
                   color: Colors.amber,
                   onPressed: () async {
@@ -377,18 +375,20 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Form buildResetForm() {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     print("resetform çaıştı");
 
     final resetFormKey = GlobalKey<FormState>();
     return Form(
         key: resetFormKey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text(
+          Text(
             "Şifre Sıfırla",
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: width * 0.063),
           ),
-          const SizedBox(
-            height: 25,
+          SizedBox(
+            height: height * 0.028,
           ),
           TextFormField(
             controller: resetEmailController,
@@ -413,11 +413,11 @@ class _SignInPageState extends State<SignInPage> {
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0))),
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: height * 0.011,
           ),
           SizedBox(
-            width: 200,
+            width: width * 0.51,
             child: SignInButton(
                 color: Colors.amber,
                 onPressed: () async {

@@ -48,7 +48,7 @@ class CategoriesPage extends StatelessWidget {
         body: SafeArea(
           child: GridView.builder(
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             itemCount: categoriesImages.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

@@ -32,7 +32,7 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(
-          source: source, imageQuality: 50, maxHeight: 960, maxWidth: 1280);
+          source: source, imageQuality: 75, maxHeight: 960, maxWidth: 1280);
       if (image == null) return;
 
       final imageTemporary = File(image.path);
@@ -158,6 +158,8 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
   }
 
   Widget buildSheet() {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -169,16 +171,16 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                   .then((value) => Navigator.pop(context));
             },
             child: SizedBox(
-                height: 50,
+                height: height * 0.057,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Icon(Icons.add_a_photo_rounded),
-                  const SizedBox(
-                    width: 8,
+                  SizedBox(
+                    width: width * 0.020,
                   ),
                   Text(
                     'Kamera',
-                    style: GoogleFonts.kanit(fontSize: 20),
+                    style: GoogleFonts.kanit(fontSize: width * 0.051),
                   ),
                 ])),
           ),
@@ -189,18 +191,18 @@ class _DetailedCategoriesViewState extends State<DetailedCategoriesView> {
                   .then((value) => Navigator.pop(context));
             },
             child: SizedBox(
-                height: 50,
+                height: height * 0.057,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Icon(Icons.camera_alt_rounded),
-                  const SizedBox(
-                    width: 8,
+                  SizedBox(
+                    width: width * 0.020,
                   ),
                   Text(
                     'Galeri',
-                    style: GoogleFonts.kanit(fontSize: 20),
+                    style: GoogleFonts.kanit(fontSize: width * 0.051),
                   ),
-                  const SizedBox(width: 13),
+                  SizedBox(width: width * 0.033),
                 ])),
           )
         ]);

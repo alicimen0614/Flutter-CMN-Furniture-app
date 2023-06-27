@@ -1,4 +1,5 @@
 import 'package:cimenfurniture/models/customers_model.dart';
+import 'package:cimenfurniture/models/works_model.dart';
 import 'package:cimenfurniture/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -27,5 +28,14 @@ class CustomersPageModel extends ChangeNotifier {
   Future<void> deleteCustomer(Customers customer) async {
     await _database.deleteDocument(
         referencePath: customersRef, id: customer.id);
+  }
+
+  Future<void> updateCustomer(String id, String name, String surname,
+      bool isDone, List<Works> works) async {
+    Customers customer = Customers(
+        id: id, name: name, surname: surname, works: works, isDone: isDone);
+
+    _database.setCustomerData(
+        collectionPath: customersRef, customerAsMap: customer.toMap());
   }
 }

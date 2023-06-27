@@ -10,6 +10,8 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<Auth>(context, listen: false).currentUser();
     bool isAnonymous = user?.isAnonymous as bool;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.amberAccent.shade400,
@@ -21,8 +23,8 @@ class UserPage extends StatelessWidget {
             user!.photoURL != null
                 ? ClipOval(
                     child: CachedNetworkImage(
-                      height: 150,
-                      width: 150,
+                      height: height * 0.172,
+                      width: width * 0.38,
                       fit: BoxFit.cover,
                       imageUrl: user.photoURL as String,
                       placeholder: (context, url) => Column(
@@ -37,8 +39,8 @@ class UserPage extends StatelessWidget {
                     child:
                         Image.asset('lib/images/user.png', fit: BoxFit.cover),
                   ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: height * 0.023,
             ),
             Card(
               margin:
@@ -51,14 +53,14 @@ class UserPage extends StatelessWidget {
                   title: (user.displayName != "" && user.displayName != null)
                       ? Text(
                           user.displayName as String,
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: height * 0.023,
                           ),
                         )
-                      : const Text(
+                      : Text(
                           "Kullanıcı adı yok",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: height * 0.023,
                           ),
                         )),
             ),
@@ -73,14 +75,14 @@ class UserPage extends StatelessWidget {
                 title: user.email != null
                     ? Text(
                         user.email as String,
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: height * 0.023),
                       )
                     : const Text("********"),
               ),
             ),
             SizedBox(
-              height: 70,
-              width: 150,
+              height: width * 0.178,
+              width: width * 0.38,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton.icon(

@@ -4,13 +4,10 @@ import 'package:cimenfurniture/viewmodels/customers_page_model.dart';
 import 'package:cimenfurniture/viewmodels/detailed_customer_view_model.dart';
 import 'package:cimenfurniture/screens/detailed_work_view.dart';
 import 'package:cimenfurniture/services/time_convert.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cimenfurniture/viewmodels/detailed_work_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cimenfurniture/services/database.dart';
-
 import '../models/works_model.dart';
-import '../services/auth.dart';
 
 enum FormStatus { detailedCustomer, works }
 
@@ -24,17 +21,12 @@ class DetailedCustomerView extends StatefulWidget {
 }
 
 class _DetailedCustomerViewState extends State<DetailedCustomerView> {
-  FormStatus _formStatus = FormStatus.detailedCustomer;
+  FormStatus _formStatus = FormStatus.works;
 
   var selectedDate;
   var estimatedDate;
   TextEditingController nameCtr = TextEditingController();
   TextEditingController surnameCtr = TextEditingController();
-  TextEditingController priceCtr = TextEditingController();
-  TextEditingController dateOfTakingTheWorkCtr = TextEditingController();
-  TextEditingController estimatedDeliveryDateCtr = TextEditingController();
-  TextEditingController depositCtr = TextEditingController();
-  TextEditingController addressCtr = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -42,16 +34,14 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
   void dispose() {
     nameCtr.dispose();
     surnameCtr.dispose();
-    priceCtr.dispose();
-    dateOfTakingTheWorkCtr.dispose();
-    estimatedDeliveryDateCtr.dispose();
-    depositCtr.dispose();
-    addressCtr.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     nameCtr.text = widget.customer.name;
     surnameCtr.text = widget.customer.surname;
 
@@ -62,6 +52,7 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
           return Scaffold(
             floatingActionButton: _formStatus == FormStatus.works
                 ? FloatingActionButton(
+                    foregroundColor: Colors.white,
                     //THIS IS OCCURRING SLOW??
                     onPressed: () {
                       Navigator.push(
@@ -82,40 +73,61 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                 tooltip: 'Müşteriyi sil',
                 onPressed: () async {
                   await Provider.of<CustomersPageModel>(context, listen: false)
-                      .deleteCustomer(widget.customer);
+                      .deleteCustomer(widget.customer)
+                      .whenComplete(() =>
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.black54,
+                            content: const Text('Başarıyla Silindi!'),
+                            action: SnackBarAction(
+                              label: 'Kapat',
+                              onPressed: () {},
+                            ),
+                            width: width,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          )));
                   if (!mounted) return;
                   Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.black54,
-                    content: const Text('Başarıyla Silindi!'),
-                    action: SnackBarAction(
-                      label: 'Kapat',
-                      onPressed: () {},
-                    ),
-                    width: 350.0,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                    ),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ));
                 },
               ),
             ]),
             body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(children: [
-                const SizedBox(
-                  height: 15,
+                SizedBox(
+                  height: width * 0.038,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      height: 50,
-                      width: 185,
+                      height: height * 0.057,
+                      width: width * 0.472,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.work_history),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _formStatus == FormStatus.works
+                              ? const Color(0xFFFF3F00).withAlpha(200)
+                              : const Color(0xFFFF3F00),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _formStatus = FormStatus.works;
+                          });
+                        },
+                        label: const Text('İşler'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: height * 0.057,
+                      width: width * 0.472,
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.person),
                         style: ElevatedButton.styleFrom(
@@ -134,30 +146,10 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                         label: const Text('Müşteri Detayı'),
                       ),
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: 185,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.work_history),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _formStatus == FormStatus.works
-                              ? const Color(0xFFFF3F00).withAlpha(200)
-                              : const Color(0xFFFF3F00),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _formStatus = FormStatus.works;
-                          });
-                        },
-                        label: const Text('İşler'),
-                      ),
-                    )
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
+                SizedBox(
+                  height: height * 0.017,
                 ),
                 _formStatus == FormStatus.detailedCustomer
                     ? snapshot.data!
@@ -173,6 +165,8 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
   }
 
   Future<Widget> detailedCustomerView(BuildContext context) async {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
         child: ListView(
@@ -191,9 +185,9 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                           borderRadius: BorderRadius.circular(50.0),
                           borderSide:
                               const BorderSide(color: Colors.amberAccent)),
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.account_circle_sharp,
-                        size: 40,
+                        size: width * 0.102,
                       ),
                       hintText: "Müşteri Adı",
                       border: OutlineInputBorder(
@@ -206,9 +200,9 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                     }
                   },
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: height * 0.0057),
                 const Divider(color: Colors.black87),
-                const SizedBox(height: 5),
+                SizedBox(height: height * 0.0057),
                 TextFormField(
                     controller: surnameCtr,
                     cursorColor: Colors.black,
@@ -217,8 +211,8 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                             borderRadius: BorderRadius.circular(50.0),
                             borderSide:
                                 const BorderSide(color: Colors.amberAccent)),
-                        prefixIcon:
-                            const Icon(Icons.supervised_user_circle, size: 40),
+                        prefixIcon: Icon(Icons.supervised_user_circle,
+                            size: width * 0.102),
                         hintText: "Müşteri Soyadı",
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(50.0))),
@@ -229,8 +223,8 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                         return null;
                       }
                     }),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: height * 0.0510,
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -248,9 +242,9 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                           RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0),
                   ))),
-                  child: const Text(
+                  child: Text(
                     "Kaydet",
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: width * 0.056),
                   ),
                 ),
               ],
@@ -262,16 +256,22 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
   Widget worksView() {
     List<Works> worksList = widget.customer.works;
 
+    bool isAllDoneForFalse = false;
+
     return StreamBuilder(
       stream: context
           .read<DetailedCustomerViewModel>()
           .getNewCustomer(widget.customer.id),
       builder: (context, snapshotOfStream) => ListView.separated(
           reverse: true,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, index) {
+            int cost = worksList[index].price;
+            bool isDone = worksList[index].isDone;
+            print("$cost -- $isDone");
+
             var delvDateAsDateTime = TimeConvert.datetimeFromTimestamp(
                 worksList[index].estimatedDeliveryDate);
             var delvDateAsString =
@@ -291,8 +291,65 @@ class _DetailedCustomerViewState extends State<DetailedCustomerView> {
                   highlightColor: Colors.grey,
                   splashColor: Colors.amberAccent,
                   child: ListTile(
-                    trailing: Text("${worksList[index].price} TL"),
-                    title: Text("${worksList[index].id}"),
+                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text("${worksList[index].price} TL"),
+                      Transform.scale(
+                        scale: 1.2,
+                        child: Checkbox(
+                            shape: CircleBorder(),
+                            value: worksList[index].isDone,
+                            onChanged: (bool? value) async {
+                              Works newWork = Works(
+                                  id: worksList[index].id,
+                                  price: worksList[index].price,
+                                  dateOfTakingTheWork:
+                                      worksList[index].dateOfTakingTheWork,
+                                  estimatedDeliveryDate:
+                                      worksList[index].estimatedDeliveryDate,
+                                  deposit: worksList[index].deposit,
+                                  address: worksList[index].address,
+                                  notes: worksList[index].notes,
+                                  remainingMoneyToPay:
+                                      worksList[index].remainingMoneyToPay,
+                                  isDone: value!,
+                                  workName: worksList[index].workName);
+
+                              await context
+                                  .read<DetailedWorkViewModel>()
+                                  .updateNewWork(newWork, widget.customer,
+                                      worksList[index]);
+
+                              bool isEveryElementTrue = worksList
+                                  .every((element) => element.isDone == true);
+                              print(worksList
+                                  .every((element) => element.isDone == true));
+                              if (isEveryElementTrue == true) {
+                                print("isEveryElementTrue == true");
+                                if (!mounted) return;
+                                await context
+                                    .read<CustomersPageModel>()
+                                    .updateCustomer(
+                                        widget.customer.id,
+                                        widget.customer.name,
+                                        widget.customer.surname,
+                                        true,
+                                        widget.customer.works);
+                              } else {
+                                print("isEveryElementTrue == false");
+                                if (!mounted) return;
+                                await context
+                                    .read<CustomersPageModel>()
+                                    .updateCustomer(
+                                        widget.customer.id,
+                                        widget.customer.name,
+                                        widget.customer.surname,
+                                        false,
+                                        widget.customer.works);
+                              }
+                            }),
+                      )
+                    ]),
+                    title: Text(worksList[index].workName),
                     subtitle: Text("Tahmini Teslim Tarihi : $delvDateAsString"),
                   )),
             );

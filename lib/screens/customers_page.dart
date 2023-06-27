@@ -1,5 +1,6 @@
 import 'package:cimenfurniture/models/customers_model.dart';
 import 'package:cimenfurniture/screens/add_customer_view.dart';
+import 'package:cimenfurniture/viewmodels/add_customer_view_model.dart';
 import 'package:cimenfurniture/viewmodels/customers_page_model.dart';
 import 'package:cimenfurniture/screens/detailed_customer_view.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +61,8 @@ class _CustomersPageState extends State<CustomersPage> {
               ));
         },
         backgroundColor: Colors.amber,
-        child: const Icon(Icons.add),
         foregroundColor: Colors.white,
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -139,6 +140,14 @@ class _BuildListViewState extends State<BuildListView> {
                   splashColor: Colors.amberAccent,
                   child: ListTile(
                     title: Text("${list[index].name} ${list[index].surname}"),
+                    trailing: Transform.scale(
+                      scale: 1.2,
+                      child: Checkbox(
+                        shape: CircleBorder(),
+                        value: widget.customerList[index].isDone,
+                        onChanged: (bool? value) {},
+                      ),
+                    ),
                   )),
             );
           }),

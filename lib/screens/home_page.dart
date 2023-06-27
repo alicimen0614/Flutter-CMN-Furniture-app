@@ -25,6 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     print("homepage çalıştı");
     return Scaffold(
         backgroundColor: Colors.grey[100],
@@ -38,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   CarouselSlider.builder(
                     carouselController: controller,
                     options: CarouselOptions(
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        height: height * 0.5,
                         autoPlay: true,
                         autoPlayAnimationDuration: const Duration(seconds: 2),
                         enableInfiniteScroll: false,
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Text("Bizi Instagram'dan takip edin.",
                       style: GoogleFonts.kanit(
-                          textStyle: const TextStyle(fontSize: 20))),
+                          textStyle: TextStyle(fontSize: width * 0.051))),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -73,12 +75,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             _launchUrl();
                           },
                           icon: const Icon(FontAwesomeIcons.instagram),
-                          iconSize: 50,
+                          iconSize: width * 0.127,
                         ),
                         Text(
                           "|",
                           style: TextStyle(
-                              fontSize: 50,
+                              fontSize: width * 0.127,
                               fontWeight: FontWeight.w100,
                               fontFamily: GoogleFonts.abel().fontFamily),
                         ),
@@ -88,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Text(
                           "CMN",
                           style: GoogleFonts.merriweather(
-                              textStyle: TextStyle(fontSize: 25)),
+                              textStyle: TextStyle(fontSize: width * 0.063)),
                         )
                       ],
                     ),

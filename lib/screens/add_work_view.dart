@@ -1,7 +1,10 @@
 import 'package:cimenfurniture/models/customers_model.dart';
 import 'package:cimenfurniture/services/time_convert.dart';
+import 'package:cimenfurniture/widgets/date_picker_widget.dart';
+import 'package:cimenfurniture/widgets/text_editing_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../models/works_model.dart';
@@ -26,6 +29,8 @@ class _AddWorkViewState extends State<AddWorkView> {
   TextEditingController depositCtr = TextEditingController();
   TextEditingController addressCtr = TextEditingController();
   TextEditingController notesCtr = TextEditingController();
+  TextEditingController remainingMoneyToPayCtr = TextEditingController();
+  TextEditingController workNameCtr = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,6 +41,8 @@ class _AddWorkViewState extends State<AddWorkView> {
     estimatedDeliveryDateCtr.dispose();
     depositCtr.dispose();
     addressCtr.dispose();
+    workNameCtr.dispose();
+    remainingMoneyToPayCtr.dispose();
     super.dispose();
   }
 
@@ -54,183 +61,208 @@ class _AddWorkViewState extends State<AddWorkView> {
         body: Form(
             key: _formKey,
             child: ListView(
+              physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.all(mediaQueryWidth * 0.036),
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    TextFormField(
-                        controller: addressCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.home_sharp,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "Adres",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Adres Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        workNameCtr,
+                        Icons.work,
+                        "İş Adı",
+                        1,
+                        true,
+                        () {},
+                        true,
+                        (p0) {}, (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'İş Adı Boş Olamaz';
+                      } else {
+                        return null;
+                      }
+                    }, true),
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-                    TextFormField(
-                        controller: priceCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.monetization_on,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "Fiyat",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Fiyat Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        addressCtr,
+                        Icons.home_sharp,
+                        "Adres",
+                        1,
+                        true,
+                        () {},
+                        true,
+                        (p0) {}, (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Adres Boş Olamaz';
+                      } else {
+                        return null;
+                      }
+                    }, true),
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-                    TextFormField(
-                        enableInteractiveSelection:
-                            false, //dismiss the selection tool when you click to the textformfield
-                        cursorWidth: 0,
-                        showCursor: false,
-                        onTap: () async {
+                    customizeTextFormField(
+                        ([FilteringTextInputFormatter.digitsOnly]),
+                        mediaQueryWidth,
+                        priceCtr,
+                        Icons.monetization_on,
+                        "Fiyat",
+                        1,
+                        true,
+                        () {},
+                        true, (value) {
+                      String a = priceCtr.text;
+                      String b = depositCtr.text;
+                      print("$a--$b");
+                      if (priceCtr.text != "" && depositCtr.text != "") {
+                        print("ilk if girdi");
+                        remainingMoneyToPayCtr.text =
+                            (int.parse(value) - int.parse(depositCtr.text))
+                                .toString();
+                      } else if (depositCtr.text == "") {
+                        print("2. if girdi");
+                        remainingMoneyToPayCtr.text = value;
+                      }
+                    }, (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Fiyat Boş Olamaz';
+                      } else {
+                        return null;
+                      }
+                    }, true),
+                    SizedBox(height: mediaQueryHeight * 0.003),
+                    const Divider(color: Colors.black87),
+                    SizedBox(height: mediaQueryHeight * 0.003),
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        dateOfTakingTheWorkCtr,
+                        Icons.date_range_sharp,
+                        "İşi Alış Tarihi",
+                        1,
+                        false,
+                        () async {
                           FocusScope.of(context).requestFocus(
                               FocusNode()); //dismiss the keyboard when you click to the textformfield
-                          selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime(2024));
-
-                          dateOfTakingTheWorkCtr.text =
-                              TimeConvert.dateTimeToString(selectedDate);
-
-                          selectedDateAsTimestamp =
-                              TimeConvert.datetimeToTimestamp(selectedDate);
+                          selectedDate = await datePickerWidget(context,
+                              'İşi aldığınız tarihi seçin', DateTime.now());
+                          if (selectedDate != null) {
+                            dateOfTakingTheWorkCtr.text =
+                                TimeConvert.dateTimeToString(selectedDate);
+                            selectedDateAsTimestamp =
+                                TimeConvert.datetimeToTimestamp(selectedDate);
+                          }
                         },
-                        controller: dateOfTakingTheWorkCtr,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.date_range_sharp,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "İşi Alış Tarihi",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
+                        false,
+                        (p0) {},
+                        (value) {
                           if (value == null || value.isEmpty) {
                             return 'İşi Alış Tarihi Boş Olamaz';
                           } else {
                             return null;
                           }
-                        }),
+                        },
+                        true),
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-                    TextFormField(
-                        enableInteractiveSelection:
-                            false, //dismiss the selection tool when you click to the textformfield
-                        showCursor: false,
-                        onTap: () async {
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        estimatedDeliveryDateCtr,
+                        Icons.access_time_filled_sharp,
+                        "Tahmini Teslim Tarihi",
+                        1,
+                        false,
+                        (() async {
                           FocusScope.of(context).requestFocus(
                               FocusNode()); //dismiss the keyboard when you click to the textformfield
-                          estimatedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2022),
-                              lastDate: DateTime(2024));
-
-                          estimatedDeliveryDateCtr.text =
-                              TimeConvert.dateTimeToString(estimatedDate);
-                          estimatedDateAsTimestamp =
-                              TimeConvert.datetimeToTimestamp(estimatedDate);
-                        },
-                        controller: estimatedDeliveryDateCtr,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.access_time_filled_sharp,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "Tahmini Teslim Tarihi",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
+                          estimatedDate = await datePickerWidget(context,
+                              'Tahmini teslim tarihini seçin', DateTime.now());
+                          if (estimatedDate != null) {
+                            estimatedDeliveryDateCtr.text =
+                                TimeConvert.dateTimeToString(estimatedDate);
+                            estimatedDateAsTimestamp =
+                                TimeConvert.datetimeToTimestamp(estimatedDate);
+                          }
+                        }),
+                        false,
+                        (p0) {},
+                        (value) {
                           if (value == null || value.isEmpty) {
                             return 'Tahmini Teslim Tarihi Boş Olamaz';
                           } else {
                             return null;
                           }
-                        }),
+                        },
+                        true),
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-                    TextFormField(
-                        controller: depositCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.price_check_sharp,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "Kapora",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Kapora Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
+                    customizeTextFormField(
+                        ([FilteringTextInputFormatter.digitsOnly]),
+                        mediaQueryWidth,
+                        depositCtr,
+                        Icons.price_check_sharp,
+                        "Kapora",
+                        1,
+                        true,
+                        () {},
+                        true, (value) {
+                      String a = priceCtr.text;
+                      String b = depositCtr.text;
+                      print("$a--$b");
+                      if (priceCtr.text != "" && depositCtr.text != "") {
+                        print("ilk if girdi");
+                        remainingMoneyToPayCtr.text =
+                            (int.parse(priceCtr.text) - int.parse(value))
+                                .toString();
+                      } else if (depositCtr.text == "") {
+                        print("2 if girdi");
+                        remainingMoneyToPayCtr.text = priceCtr.text;
+                      }
+                    }, (p0) {
+                      return null;
+                    }, true),
                     SizedBox(height: mediaQueryHeight * 0.003),
                     const Divider(color: Colors.black87),
                     SizedBox(height: mediaQueryHeight * 0.003),
-                    TextFormField(
-                        maxLines: 4,
-                        controller: notesCtr,
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.all(mediaQueryWidth * 0.024),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(
-                                    color: Colors.amberAccent)),
-                            prefixIcon: Icon(Icons.speaker_notes,
-                                size: mediaQueryWidth * 0.1),
-                            hintText: "Notlar",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0))),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Adres Boş Olamaz';
-                          } else {
-                            return null;
-                          }
-                        }),
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        remainingMoneyToPayCtr,
+                        Icons.attach_money,
+                        "Kalan Ödenecek Para",
+                        1,
+                        true,
+                        () {},
+                        true,
+                        (p0) {}, (p0) {
+                      return null;
+                    }, false),
+                    SizedBox(height: mediaQueryHeight * 0.003),
+                    const Divider(color: Colors.black87),
+                    SizedBox(height: mediaQueryHeight * 0.003),
+                    customizeTextFormField(
+                        ([]),
+                        mediaQueryWidth,
+                        notesCtr,
+                        Icons.speaker_notes,
+                        "Notlar",
+                        4,
+                        true,
+                        () {},
+                        true,
+                        (p0) {}, (p0) {
+                      return null;
+                    }, true),
+                    SizedBox(height: mediaQueryHeight * 0.006),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -239,9 +271,16 @@ class _AddWorkViewState extends State<AddWorkView> {
                               price: int.parse(priceCtr.text),
                               dateOfTakingTheWork: selectedDateAsTimestamp,
                               estimatedDeliveryDate: estimatedDateAsTimestamp,
-                              deposit: int.parse(depositCtr.text),
+                              deposit: depositCtr.text == ""
+                                  ? 0
+                                  : int.parse(depositCtr.text),
                               address: addressCtr.text,
-                              notes: notesCtr.text);
+                              notes: notesCtr.text,
+                              remainingMoneyToPay: depositCtr.text == ""
+                                  ? int.parse(priceCtr.text)
+                                  : int.parse(priceCtr.text) -
+                                      int.parse(depositCtr.text),
+                              workName: workNameCtr.text);
 
                           workList.add(newWork);
 

@@ -10,17 +10,23 @@ class Works {
   final String address;
   final int cost;
   final String notes;
+  final int remainingMoneyToPay;
+  final bool isDone;
+  final String workName;
 
   Works(
       {required this.id,
       required this.price,
       required this.dateOfTakingTheWork,
       required this.estimatedDeliveryDate,
-      required this.deposit,
+      this.deposit = 0,
       this.earning = 0,
       required this.address,
       this.cost = 0,
-      required this.notes});
+      required this.notes,
+      this.remainingMoneyToPay = 0,
+      this.isDone = false,
+      required this.workName});
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -31,7 +37,10 @@ class Works {
         'earning': earning,
         'address': address,
         'cost': cost,
-        'notes': notes
+        'notes': notes,
+        'remainingMoneyToPay': remainingMoneyToPay,
+        'isDone': isDone,
+        'workName': workName
       };
 
   factory Works.fromMap(Map map) {
@@ -44,6 +53,9 @@ class Works {
         earning: map['earning'],
         estimatedDeliveryDate: map['estimatedDeliveryDate'],
         price: map['price'],
-        notes: map['notes']);
+        notes: map['notes'],
+        remainingMoneyToPay: map['remainingMoneyToPay'],
+        isDone: map['isDone'],
+        workName: map['workName']);
   }
 }
